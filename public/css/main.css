@@ -1,0 +1,199 @@
+@import 'common.css';
+@import 'display.css';
+@import 'playlist.css';
+
+
+#planets-app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.blurred-bg {
+    position: fixed;
+    top: 0;
+    left: -140px;
+    /* -webkit-filter: blur(13px); */
+    width: 100vh;
+    height: 100%;
+    transition: opacity 700ms linear;
+}
+.blurred-bg.top {
+    background-image: url(../img/demo-cover-1.jpg);
+    z-index 1;
+    opacity: 0;
+}
+.blurred-bg.top.visible {
+    opacity: 1;
+}
+.header {
+    position: absolute;
+
+    top: 0;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+}
+.menu-thumb {
+    position: absolute;
+
+    left: 25px;
+    top: 18px;
+    background: url(../img/menu.png);
+    height: 20px;
+    width: 18px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.label {
+    display: inline-block;
+    line-height: 60px;
+    font-size: 26px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: bold;
+}
+.menu {
+
+}
+.planet-scroller {
+    position: absolute;
+
+    top: 60px;
+    bottom: 70px;
+    width: 100%;
+    overflow: hidden;
+    transition: -webkit-filter 150ms ease-in 50ms;
+}
+.footer {
+    position: fixed;
+
+    bottom: 0;
+    height: 80px;
+    padding-top: 30px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0);
+    box-sizing: border-box;
+    transition: height 200ms ease-in, background 200ms ease-in;
+    -webkit-transform: translateZ(0px);
+}
+
+.planets {
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    -webkit-transform: translateY(-240px);
+}
+
+.planet {
+    width: 150px;
+
+    height: 150px;
+    margin: 5px 50px;
+    display: inline-block;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 5px;
+    border: 2px solid rgba(106, 247, 213, 0.6);
+    background-clip: content-box;
+    background-size: auto 100%;
+    background-position-x: center;
+}
+.planet.center {
+    width: 255px;
+    height: 255px;
+}
+.planet-scroller canvas {
+    width: 360px;
+    height: 490px;
+    position: absolute;
+    top: 0;
+    left: 0px;
+}
+
+
+#planets-app.playlist-opened .footer {
+    height: calc(100% - 50px);
+    background: rgba(255, 255, 255, 0.3);
+}
+#planets-app.playlist-opened .planet-scroller {
+    -webkit-filter: blur(8px);
+}
+#planets-app.playlist-opened .blurred-bg {
+    -webkit-filter: brightness(75%);
+}
+
+
+
+.web-demo #planets-app {
+    height: 493px;
+    width: 320px;
+    overflow: hidden;
+    cursor: url(../img/touch-pointer.png), auto;
+    top: 118px;
+    left: 96px;
+}
+.web-demo .footer {
+    position: absolute;
+    font-size: 90%;
+}
+.web-demo #blurred-canvas {
+    position: absolute;
+    width: 493px;
+    height: 493px;
+    left: -84px;
+}
+.web-demo #planets-canvas {
+    height: 363px;
+    width: 320px;
+}
+.web-demo .track-album {
+    width: 78px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 15px;
+}
+.web-demo .track-title {
+    max-width: 110px;
+}
+.web-demo {
+    background: url(../img/nexus4.png);
+    background-repeat: no-repeat;
+    background-position: 40px 40px;
+}
+
+
+.nexus-buttons {
+    position: absolute;
+    width: 320px;
+    height: 40px;
+    background: black;
+    top: 611px;
+    left: 96px;
+}
+.nexus-buttons .back {
+    background: url(../img/nexus-back.png);
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 30px;
+    background-size: 100%;
+    position: absolute;
+    top: 4px;
+    left: 50px;
+}
+.nexus-buttons .home {
+    background: url(../img/nexus-home.png); background-repeat: no-repeat; width: 50px; height: 30px; background-size: 100%; position: absolute; top: 4px;
+    left: 134px;
+}
+.nexus-buttons .tasks {
+    background: url(../img/nexus-tasks.png); background-repeat: no-repeat; width: 50px; height: 30px; background-size: 100%; position: absolute; top: 4px;
+    left: 220px;
+}
+.web-demo .track-details span {
+    margin-left: 16px;
+    padding-left: 16px;
+}

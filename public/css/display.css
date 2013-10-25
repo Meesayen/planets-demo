@@ -1,0 +1,82 @@
+.display {
+    position: relative;
+
+    width: 100%;
+    height: 35px;
+    box-sizing: border-box;
+    padding-left: 70px;
+}
+.trick-btn {
+    position: absolute;
+
+    left: 20px;
+    top: 0px;
+    font-size: 10px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 24px !important;
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.6);
+}
+.trick-btn.pause {
+    background: url(../img/pause.png); background-repeat: no-repeat; background-size: 100%;
+}
+.thumb {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.6);
+    top: 0;
+    text-align: center;
+    right: 10px;
+    font-size: 20px;
+    width: 40px !important;
+    height: 40px !important;
+}
+.thumb.icon-remove {
+    font-size: 16px;
+    top: -15px;
+}
+.thumb.list-up {
+    background-image: url(../img/list-up.png); background-repeat: no-repeat; background-position: center 2px; opacity: 0.6; background-size: 13px;
+}
+.track-info {
+    width: 85%;
+
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: bold;
+    font-size: 110%;
+}
+.track-artist {
+    display: inline-block;
+
+    overflow: hidden;
+}
+.track-title {
+    display: inline-block;
+
+    max-width: 140px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.track-details {
+    font-size: 11px;
+
+    text-transform: uppercase;
+    line-height: 11px;
+    margin-top: -6px;
+}
+.track-details span {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    padding-top: 2px;
+    top: -5px;
+}
+.track-album {
+    display: inline-block;
+    width: 108px;
+}
