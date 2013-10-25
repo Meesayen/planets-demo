@@ -65,7 +65,7 @@
     transition: -webkit-filter 150ms ease-in 50ms;
 }
 .footer {
-    position: fixed;
+    position: absolute;
 
     bottom: 0;
     height: 80px;
@@ -168,6 +168,7 @@
 
 
 .nexus-buttons {
+    display: none;
     position: absolute;
     width: 320px;
     height: 40px;
@@ -196,4 +197,7 @@
 .web-demo .track-details span {
     margin-left: 16px;
     padding-left: 16px;
+}
+.web-demo .nexus-buttons {
+    display: block;
 }

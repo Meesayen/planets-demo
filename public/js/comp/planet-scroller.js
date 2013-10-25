@@ -327,13 +327,32 @@ define([
 					this._offscreen = false;
 				}
 			}
-			this._x = GALAXY[this._pos].x;
-			this._y = GALAXY[this._pos].y;
-			this._r = this._calcRadius();
+
+			if (this._offscreen) {
+				this._x = GALAXY[this._pos].x;
+				this._y = GALAXY[this._pos].y;
+				this._r = this._calcRadius();
+			} else {
+				var x = GALAXY[this._pos].x;
+				var y = GALAXY[this._pos].y;
+				var r = this._calcRadius();
+				this._snap(x, y, r, direction);
+			}
 
 			if (this._pos === 2) {
 				this.emit('planet:selected', this._data);
 			}
+		},
+		_snap: function(x, y, r, direction) {
+			if (this._y * direction >= (y * direction) - 8 || (!this._y && this._y !== 0)) {
+				this._x = GALAXY[this._pos].x;
+				this._y = GALAXY[this._pos].y;
+				this._r = this._calcRadius();
+				return;
+			}
+			this._y += direction * 8;
+			this._r = this._calcRadius();
+			rAF(this._snap.bind(this, x, y, r, direction));
 		},
 		_calcRadius: function() {
 			var distance = Math.abs(GALAXY[GALAXY_CENTER].y - this._y);
