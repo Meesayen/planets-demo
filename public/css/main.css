@@ -75,6 +75,7 @@
     box-sizing: border-box;
     transition: height 200ms ease-in, background 200ms ease-in;
     -webkit-transform: translateZ(0px);
+    overflow: hidden;
 }
 
 .planets {
@@ -164,6 +165,7 @@
     background: url(../img/nexus4.png);
     background-repeat: no-repeat;
     background-position: 40px 40px;
+    letter-spacing: 1px;
 }
 
 
@@ -200,4 +202,26 @@
 }
 .web-demo .nexus-buttons {
     display: block;
+}
+
+.force-fullscreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+}
+.force-fullscreen:after {
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    content: 'Tap anywhere for the fullscreen experience';
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 25px;
+    text-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
 }

@@ -20,7 +20,8 @@ define([
 	var
 		ss = window.sessionStorage,
 		ls = window.localStorage,
-		_slice = Array.prototype.slice;
+		_slice = Array.prototype.slice,
+		UA = navigator.userAgent;
 
 	var Promise = function() {
 		this._data = null;
@@ -197,7 +198,9 @@ define([
 		require: require,
 		Promise: Promise,
 		deviceInfo: {
-			isAndroid: navigator.userAgent.indexOf('Android') > -1
+			isMobile: (UA.indexOf('Android') > -1
+				|| UA.indexOf('iPhone') > -1
+				|| UA.indexOf('iPad') > -1)
 		}
 	}
 });

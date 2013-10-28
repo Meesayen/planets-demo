@@ -34,10 +34,13 @@
 }
 .thumb.icon-remove {
     font-size: 16px;
-    top: -15px;
+    top: -29px;
+    line-height: 41px;
 }
 .thumb.list-up {
-    background-image: url(../img/list-up.png); background-repeat: no-repeat; background-position: center 2px; opacity: 0.6; background-size: 13px;
+    background-image: url(../img/list-up.png); background-repeat: no-repeat; 
+    background-position: center center; opacity: 0.6; background-size: 13px;
+    top: -16px;
 }
 .track-info {
     width: 85%;

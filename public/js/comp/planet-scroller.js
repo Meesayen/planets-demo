@@ -9,39 +9,28 @@ define([
 ) {
 
 	var
-		ANDROID = x.deviceInfo.isAndroid,
+		MOBILE = x.deviceInfo.isMobile,
 		TOUCH_START_EVT = 'ontouchstart' in window ? 'touchstart' : 'mousedown',
 		TOUCH_END_EVT = 'ontouchend' in window ? 'touchend' : 'mouseup',
 		TOUCH_MOVE_EVT = 'ontouchmove' in window ? 'touchmove' : 'mousemove',
+		SCREEN_WIDTH = MOBILE ? screen.availWidth : 320,
+		SCREEN_HEIGHT = MOBILE ? screen.availHeight : 495,
 		PI2 = Math.PI * 2,
-		RAD_15 = Math.PI/12,
+
+		// Galaxy Constants
+		GALAXY_CANVAS_HEIGHT = SCREEN_HEIGHT - 50 - 80,
 		GALAXY_OFFSCREEN_Y = 215,
 		GALAXY_TOPMOST = 0,
 		GALAXY_TOP = 1,
 		GALAXY_CENTER = 2,
 		GALAXY_BOTTOM = 3,
 		GALAXY_BOTTOMMOST = 4,
-		GALAXY = [{
-			// top off screen
-			x: ANDROID ? 180: 160,
-			y: ANDROID ? -205 : -110
-		}, {
-			// top visible
-			x: ANDROID ? 180: 160,
-			y: ANDROID ? 10 : 35
-		}, {
-			// center
-			x: ANDROID ? 180: 160,
-			y: ANDROID ? 225 : 180
-		}, {
-			// bottom visible
-			x: ANDROID ? 180: 160,
-			y: ANDROID ? 440 : 325
-		}, {
-			// bottom off screen
-			x: ANDROID ? 180: 160,
-			y: ANDROID ? 655 : 470
-		}],
+		GALAXY = [], // Calculated later
+		SECONDARY_PLANET_SMALLNESS = 60, // Percentage of smallness
+		MAIN_PLANET_RADIUS = 0, // Calculated Later
+		PLANETS_DISTANCE_DELTA = 0, // Calculated Later
+		PLANETS_MARGIN = 20,
+
 		RATIO = (function() {
 			var devicePixelRatio = window.devicePixelRatio || 1;
 			var backingStoreRatio = (function() {
@@ -69,12 +58,14 @@ define([
 			var canvas = this._root = document.createElement('canvas');
 			canvas.id = 'planets-canvas';
 			this._ctx = this._root.getContext('2d');
-			var oldWidth = ANDROID ? 360 : 320;
-			var oldHeight = ANDROID ? 460 : 363;
+			var oldWidth = SCREEN_WIDTH;
+			var oldHeight = GALAXY_CANVAS_HEIGHT;
 			canvas.width = oldWidth * RATIO;
 			canvas.height = oldHeight * RATIO;
 			canvas.style.width = oldWidth + 'px';
 			canvas.style.height = oldHeight + 'px';
+
+			this._calculateGalaxyPoints();
 
 			this._planets = [];
 			this._planets.push(new Planet({
@@ -203,6 +194,43 @@ define([
 		},
 		_onPlanetSelection: function(data) {
 			this.emit('planet:selected', data);
+		},
+		_calculateGalaxyPoints: function() {
+			var
+				galaxyCenterX = SCREEN_WIDTH / 2,
+				galaxyCenterY = GALAXY_CANVAS_HEIGHT / 2,
+				radius = GALAXY_CANVAS_HEIGHT / 5 * 3;
+
+			MAIN_PLANET_RADIUS = (radius > SCREEN_WIDTH ?
+					SCREEN_WIDTH - 30 : radius) / 2;
+			var secondaryPlanetRadius = Math.round(MAIN_PLANET_RADIUS
+					* SECONDARY_PLANET_SMALLNESS / 100),
+				distanceFromMainPlanet = MAIN_PLANET_RADIUS
+					+ secondaryPlanetRadius + PLANETS_MARGIN;
+
+			PLANETS_DISTANCE_DELTA = MAIN_PLANET_RADIUS - secondaryPlanetRadius;
+			GALAXY = [{
+				// top off screen
+				x: galaxyCenterX,
+				y: galaxyCenterY - distanceFromMainPlanet * 2
+			}, {
+				// top visible
+				x: galaxyCenterX,
+				y: galaxyCenterY - distanceFromMainPlanet
+			}, {
+				// center
+				x: galaxyCenterX,
+				y: galaxyCenterY
+			}, {
+				// bottom visible
+				x: galaxyCenterX,
+				y: galaxyCenterY + distanceFromMainPlanet
+			}, {
+				// bottom off screen
+				x: galaxyCenterX,
+				y: galaxyCenterY + distanceFromMainPlanet * 2
+			}]
+			say.log(GALAXY);
 		}
 	});
 
@@ -210,7 +238,7 @@ define([
 		parent: DomHandler,
 		constructor: function(o) {
 			this._imgReady = false;
-			this._defaultR = ANDROID ? 120 : 80;
+			this._defaultR = MAIN_PLANET_RADIUS;
 			this._data = o.data;
 			this._satelliteP = 0;
 
@@ -356,7 +384,8 @@ define([
 		},
 		_calcRadius: function() {
 			var distance = Math.abs(GALAXY[GALAXY_CENTER].y - this._y);
-			var r = Math.max(1, this._defaultR - parseInt((45 * (distance + 1) / this._cd)));
+			var r = Math.max(1, this._defaultR
+					- parseInt((PLANETS_DISTANCE_DELTA * (distance + 1) / this._cd)));
 			return r;
 		},
 		_calcDominantColor: function() {
