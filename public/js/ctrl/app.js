@@ -46,7 +46,7 @@ define([
 			}
 			blurWorker.onmessage = this._onBlurWorkerComplete.bind(this);
 			this._label = this.nodes.one('.header .label');
-			this._offscreenCanvas = this.nodes.one('#offscreen-canvas');
+			this._offscreenCanvas = this.nodes.one('#background-offscreen-canvas');
 			this._offscreenCtx = this._offscreenCanvas.getContext('2d');
 			var blurredCanvas = this.nodes.one('.blurred-bg');
 			this._offscreenCanvas.width = blurredCanvas.width = BLURRED_CANVAS_SIZE;
@@ -95,11 +95,11 @@ define([
 
 		_onDisplayOpen: function() {
 			this._planetScroller.toggleAnimation();
-			this.nodes.one('#planets-app').classList.add('playlist-opened');;
+			this.nodes.one('#planets-app').classList.add('playlist-opened');
 		},
 		_onDisplayClose: function() {
 			this._planetScroller.toggleAnimation();
-			this.nodes.one('#planets-app').classList.remove('playlist-opened');;
+			this.nodes.one('#planets-app').classList.remove('playlist-opened');
 		},
 
 		_onPlanetSelection: function(data) {

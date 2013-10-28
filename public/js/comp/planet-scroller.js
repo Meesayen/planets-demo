@@ -186,6 +186,7 @@ define([
 			}
 		},
 		_onReleaseClick: function(e) {
+			this._deltaPlanetMovement = 0;
 			this._moveEnabled = false;
 			var direction = this._planets[2].offset > 0 ? 1 : -1
 			for (var i = 0, p; p = this._planets[i]; i++) {
@@ -331,7 +332,7 @@ define([
 		move: function(delta) {
 			this._y += delta;
 			this._r = this._calcRadius();
-			if (this._y + this._r >= GALAXY[4].y || this._y - this._r <= GALAXY[0].y) {
+			if (this._y + this._r > GALAXY[4].y || this._y - this._r < GALAXY[0].y) {
 				this._offscreen = true;
 			} else {
 				this._offscreen = false;
@@ -372,13 +373,13 @@ define([
 			}
 		},
 		_snap: function(x, y, r, direction) {
-			if (this._y * direction >= (y * direction) - 8 || (!this._y && this._y !== 0)) {
+			if (this._y * direction >= (y * direction) - 15 || (!this._y && this._y !== 0)) {
 				this._x = GALAXY[this._pos].x;
 				this._y = GALAXY[this._pos].y;
 				this._r = this._calcRadius();
 				return;
 			}
-			this._y += direction * 8;
+			this._y += direction * 15;
 			this._r = this._calcRadius();
 			rAF(this._snap.bind(this, x, y, r, direction));
 		},

@@ -37,13 +37,14 @@
 .menu-thumb {
     position: absolute;
 
-    left: 25px;
-    top: 18px;
+    left: 15px;
+    top: 8px;
     background: url(../img/menu.png);
-    height: 20px;
-    width: 18px;
+    height: 40px;
+    width: 38px;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: auto;
+    background-position: center;
 }
 .label {
     display: inline-block;
@@ -113,6 +114,7 @@
     position: absolute;
     top: 0;
     left: 0px;
+    -webkit-transform: translateZ(0);
 }
 
 
@@ -227,9 +229,8 @@
 }
 
 
-#offscreen-canvas {
+.offscreen-canvas {
     position: absolute;
     right: 200%;
-    -webkit-filter: blur(20px);
     display: none;
 }
