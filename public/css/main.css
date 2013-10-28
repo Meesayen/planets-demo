@@ -225,3 +225,11 @@
     text-align: center;
     line-height: 50px;
 }
+
+
+#offscreen-canvas {
+    position: absolute;
+    right: 200%;
+    -webkit-filter: blur(20px);
+    display: none;
+}

@@ -33,7 +33,8 @@ define([
 
 	var
 		MOBILE = x.deviceInfo.isMobile,
-		BLURRED_CANVAS_SIDE = MOBILE ? screen.availWidth * 2 : 640;
+		BLURRED_CANVAS_SIZE = MOBILE ? screen.availWidth * 2 : 640,
+		blurWorker = new Worker('js/workers/blur-worker.js');
 
 
 	var AppController = Class({
@@ -43,10 +44,13 @@ define([
 			if (!x.deviceInfo.isMobile) {
 				this._root.classList.add('web-demo');
 			}
+			blurWorker.onmessage = this._onBlurWorkerComplete.bind(this);
 			this._label = this.nodes.one('.header .label');
+			this._offscreenCanvas = this.nodes.one('#offscreen-canvas');
+			this._offscreenCtx = this._offscreenCanvas.getContext('2d');
 			var blurredCanvas = this.nodes.one('.blurred-bg');
-			blurredCanvas.width = BLURRED_CANVAS_SIDE;
-			blurredCanvas.height = BLURRED_CANVAS_SIDE;
+			this._offscreenCanvas.width = blurredCanvas.width = BLURRED_CANVAS_SIZE;
+			this._offscreenCanvas.height = blurredCanvas.height = BLURRED_CANVAS_SIZE;
 			this._blurredCtx = blurredCanvas.getContext('2d');
 			this._blurredTop = this.nodes.one('.blurred-bg.top');
 			this._blurredLevel = 1;
@@ -102,12 +106,30 @@ define([
 			setTimeout(function() {
 				var img = document.createElement('img');
 				img.onload = function() {
-					this._blurredCtx.drawImage(img, 0, 0, BLURRED_CANVAS_SIDE, BLURRED_CANVAS_SIDE);
-					boxBlurCanvasRGBA('blurred-canvas', 0, 0, BLURRED_CANVAS_SIDE, BLURRED_CANVAS_SIDE, 55, 2);
+					this._offscreenCtx.drawImage(img, 0, 0, BLURRED_CANVAS_SIZE, BLURRED_CANVAS_SIZE);
+					blurWorker.postMessage({
+						width: BLURRED_CANVAS_SIZE,
+						height: BLURRED_CANVAS_SIZE,
+						radius: 100,
+						imageData: this._offscreenCtx.getImageData(0, 0, BLURRED_CANVAS_SIZE, BLURRED_CANVAS_SIZE)
+					});
 				}.bind(this);
 				img.src = data.img;
 			}.bind(this), 300);
 			this._display.data = data;
+		},
+		_onBlurWorkerComplete: function(e) {
+			this._offscreenCtx.putImageData(e.data, 0, 0);
+			this._redrawBackground = 20;
+			this._drawBackground();
+		},
+		_drawBackground: function() {
+			if (this._redrawBackground) {
+				this._redrawBackground--;
+				this._blurredCtx.globalAlpha = 1 / this._redrawBackground;
+				this._blurredCtx.drawImage(this._offscreenCanvas, 0, 0);
+				rAF(this._drawBackground.bind(this));
+			}
 		}
 	});
 
