@@ -197,7 +197,9 @@ define([
 		},
 		require: require,
 		Promise: Promise,
-		deviceInfo: {
+		device: {
+			isChromeMobile: (UA.indexOf('Android') > -1 && UA.indexOf('Chrome')),
+			isIOS: (UA.indexOf('iPhone') > -1 || UA.indexOf('iPad')),
 			isMobile: (UA.indexOf('Android') > -1
 				|| UA.indexOf('iPhone') > -1
 				|| UA.indexOf('iPad') > -1)

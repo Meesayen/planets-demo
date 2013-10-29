@@ -138,6 +138,7 @@
     cursor: url(../img/touch-pointer.png), auto;
     top: 118px;
     left: 96px;
+    -webkit-user-select: none;
 }
 .web-demo .footer {
     position: absolute;
@@ -227,7 +228,6 @@
     text-align: center;
     line-height: 50px;
 }
-
 
 .offscreen-canvas {
     position: absolute;

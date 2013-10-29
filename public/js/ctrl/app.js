@@ -32,7 +32,7 @@ define([
 	});
 
 	var
-		MOBILE = x.deviceInfo.isMobile,
+		MOBILE = x.device.isMobile,
 		BLURRED_CANVAS_SIZE = MOBILE ? screen.availWidth * 2 : 640,
 		blurWorker = new Worker('js/workers/blur-worker.js');
 
@@ -41,7 +41,7 @@ define([
 		parent: DomHandler,
 		constructor: function() {
 			this._root = document.body;
-			if (!x.deviceInfo.isMobile) {
+			if (!MOBILE) {
 				this._root.classList.add('web-demo');
 			}
 			blurWorker.onmessage = this._onBlurWorkerComplete.bind(this);

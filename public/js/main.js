@@ -14,7 +14,7 @@ requirejs([
 ) {
 
 	var app = new App();
-	if (x.deviceInfo.isMobile) {
+	if (x.device.isChromeMobile) {
 		var _handleForceFullscreen = function(e) {
 			var
 				self = e.srcElement || e.target,

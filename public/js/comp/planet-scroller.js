@@ -9,7 +9,7 @@ define([
 ) {
 
 	var
-		MOBILE = x.deviceInfo.isMobile,
+		MOBILE = x.device.isMobile,
 		TOUCH_START_EVT = 'ontouchstart' in window ? 'touchstart' : 'mousedown',
 		TOUCH_END_EVT = 'ontouchend' in window ? 'touchend' : 'mouseup',
 		TOUCH_MOVE_EVT = 'ontouchmove' in window ? 'touchmove' : 'mousemove',
