@@ -94,23 +94,23 @@ define([
 
 	var _req = function(method, url, params) {
 		var p = new Promise();
-		var xhr = new XMLHttpRequest();
-		xhr.open(method, url);
-		xhr.onload = function() {
+		var r = new XMLHttpRequest();
+		r.open(method, url);
+		r.onload = function() {
 			if (this.status === 200) {
 				p.complete(JSON.parse(this.response));
 			} else {
 				p.reject();
 			}
 		};
-		xhr.onerror = function() {
+		r.onerror = function() {
 			p.reject();
 		};
 		if (method === 'GET') {
-			xhr.send();
+			r.send();
 		} else {
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(params));
+			r.setRequestHeader("Content-Type", "application/json");
+			r.send(JSON.stringify(params));
 		}
 		return p;
 	};

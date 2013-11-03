@@ -75,8 +75,8 @@
     background: rgba(255, 255, 255, 0);
     box-sizing: border-box;
     transition: height 200ms ease-in, background 200ms ease-in;
-    -webkit-transform: translateZ(0px);
     overflow: hidden;
+    -webkit-transform: translateZ(0px);
 }
 
 .planets {

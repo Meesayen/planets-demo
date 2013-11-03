@@ -12,9 +12,8 @@ requirejs([
 	x,
 	App
 ) {
-
 	var app = new App();
-	if (x.device.isChromeMobile) {
+	if (x.device.isChromeMobile && screen.height - 30 > document.body.clientHeight) {
 		var _handleForceFullscreen = function(e) {
 			var
 				self = e.srcElement || e.target,

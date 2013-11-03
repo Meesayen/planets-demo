@@ -11,6 +11,9 @@
     box-sizing: border-box;
     padding-top: 25px;
     color: white;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
 }
 .playlist .trick-btn {
     top: calc(50% - 16px);

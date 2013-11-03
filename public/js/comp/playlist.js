@@ -12,34 +12,25 @@ define([
 		parent: DomHandler,
 		constructor: function(o) {
 			this._root = x.render('playlist', {
-				tracks: [{
-					title: 'Mouthful of Diamonds',
-					artist: 'Phantogram',
-					album: 'Eyelid Movies',
-					year: '2010'
-				}, {
-					title: 'Bethos',
-					artist: 'Gifts From Enola',
-					album: 'From Fathom',
-					year: '2009'
-				}, {
-					title: 'Odyssey Rescue',
-					artist: 'M83',
-					album: 'Oblivion EP',
-					year: '2013'
-				}, {
-					title: 'Scar',
-					artist: 'Cloud Control',
-					album: 'Dream Cave',
-					year: '2013'
-				}, {
-					title: 'Beat The System',
-					artist: '501',
-					album: 'Beat The System EP',
-					year: '2013'
-				}]
+				tracks: []
 			});
 			this._items = this.nodes.every('.track');
+		},
+		accessors: {
+			data: {
+				get: function() {
+					return this._data;
+				},
+				set: function(data) {
+					this._data = data;
+					this._refresh();
+				}
+			}
+		},
+		_refresh: function() {
+			this._root.outerHTML = x.render('playlist', {
+				tracks: this._data
+			}, true)
 		}
 	});
 

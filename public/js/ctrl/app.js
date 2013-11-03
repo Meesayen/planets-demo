@@ -12,6 +12,9 @@ define([
 	'lib/dom-handler',
 	'lib/logger',
 
+	'ctrl/network',
+	'ctrl/player',
+
 	'comp/display',
 	'comp/playlist',
 	'comp/planet-scroller'
@@ -20,6 +23,9 @@ define([
 	Class,
 	DomHandler,
 	Logger,
+
+	network,
+	Player,
 
 	Display,
 	Playlist,
@@ -36,6 +42,10 @@ define([
 		BLURRED_CANVAS_SIZE = MOBILE ? screen.availWidth * 2 : 640,
 		blurWorker = new Worker('js/workers/blur-worker.js');
 
+	var
+		PLAYER_PLAYING = 1,
+		PLAYER_PAUSED = 2;
+
 
 	var AppController = Class({
 		parent: DomHandler,
@@ -44,6 +54,14 @@ define([
 			if (!MOBILE) {
 				this._root.classList.add('web-demo');
 			}
+
+			this._playbackStatus = PLAYER_PAUSED;
+			this._player = new Player();
+			this._player.on('audio:loading', this._onPlayerLoading.bind(this));
+			this._player.on('audio:ready', this._onPlayerReady.bind(this));
+			this._player.on('audio:playing', this._onPlayerPlaying.bind(this));
+			this._player.on('audio:paused', this._onPlayerPaused.bind(this));
+
 			blurWorker.onmessage = this._onBlurWorkerComplete.bind(this);
 			this._label = this.nodes.one('.header .label');
 			this._offscreenCanvas = this.nodes.one('#background-offscreen-canvas');
@@ -59,14 +77,7 @@ define([
 
 			var footer = this.nodes.one('#planets-app > .footer');
 			this._display = new Display();
-			this._onPlanetSelection({
-				img: 'img/demo-cover-6.jpg',
-				title: 'Mouthful of Diamonds',
-				artist: 'Phantogram',
-				album: 'Eyelid Movies',
-				year: '2010',
-				duration: '3:14'
-			});
+			this._display.on('display:trick', this._onDisplayTrick.bind(this));
 			this._display.on('display:open', this._onDisplayOpen.bind(this));
 			this._display.on('display:close', this._onDisplayClose.bind(this));
 			footer.appendChild(this._display.root);
@@ -81,7 +92,7 @@ define([
 			// this._menu.on('menu:close', this._onMenuClosed.bind(this));
 		},
 		run: function() {
-			this._planetScroller.draw();
+			network.getTracks().then(this._tracksFetched.bind(this));
 		},
 		_onThumbClick: function(e) {
 			// this._menu.toggle();
@@ -93,6 +104,13 @@ define([
 
 		},
 
+		_tracksFetched: function(data) {
+			this._tracks = data;
+			this._planetScroller.draw();
+			this._planetScroller.data = data;
+			this._playlist.data = data;
+		},
+
 		_onDisplayOpen: function() {
 			this._planetScroller.toggleAnimation();
 			this.nodes.one('#planets-app').classList.add('playlist-opened');
@@ -101,10 +119,18 @@ define([
 			this._planetScroller.toggleAnimation();
 			this.nodes.one('#planets-app').classList.remove('playlist-opened');
 		},
+		_onDisplayTrick: function(toPlay) {
+			if (toPlay) {
+				this._player.play();
+			} else {
+				this._player.pause();
+			}
+		},
 
 		_onPlanetSelection: function(data) {
 			setTimeout(function() {
 				var img = document.createElement('img');
+				img.crossOrigin = 'Anonymous';
 				img.onload = function() {
 					this._offscreenCtx.drawImage(img, 0, 0, BLURRED_CANVAS_SIZE, BLURRED_CANVAS_SIZE);
 					blurWorker.postMessage({
@@ -117,6 +143,7 @@ define([
 				img.src = data.img;
 			}.bind(this), 300);
 			this._display.data = data;
+			this._player.load(data.streamUrl);
 		},
 		_onBlurWorkerComplete: function(e) {
 			this._offscreenCtx.putImageData(e.data, 0, 0);
@@ -130,6 +157,21 @@ define([
 				this._blurredCtx.drawImage(this._offscreenCanvas, 0, 0);
 				rAF(this._drawBackground.bind(this));
 			}
+		},
+
+		// Player handlers
+		_onPlayerLoading: function() {
+		},
+		_onPlayerReady: function() {
+			if (this._playbackStatus & PLAYER_PLAYING) {
+				this._player.play(0);
+			}
+		},
+		_onPlayerPlaying: function() {
+			this._playbackStatus = PLAYER_PLAYING;
+		},
+		_onPlayerPaused: function() {
+			this._playbackStatus = PLAYER_PAUSED;
 		}
 	});
 
