@@ -61,6 +61,7 @@ define([
 			this._player.on('audio:ready', this._onPlayerReady.bind(this));
 			this._player.on('audio:playing', this._onPlayerPlaying.bind(this));
 			this._player.on('audio:paused', this._onPlayerPaused.bind(this));
+			this._player.on('audio:ended', this._onPlayerEnded.bind(this));
 
 			blurWorker.onmessage = this._onBlurWorkerComplete.bind(this);
 			this._label = this.nodes.one('.header .label');
@@ -92,7 +93,7 @@ define([
 			// this._menu.on('menu:close', this._onMenuClosed.bind(this));
 		},
 		run: function() {
-			network.getTracks().then(this._tracksFetched.bind(this));
+			network.getPlaylist(13721256).then(this._tracksFetched.bind(this));
 		},
 		_onThumbClick: function(e) {
 			// this._menu.toggle();
@@ -161,17 +162,26 @@ define([
 
 		// Player handlers
 		_onPlayerLoading: function() {
+			this._display.setTrick(Display.TRICK_LOADING);
 		},
 		_onPlayerReady: function() {
 			if (this._playbackStatus & PLAYER_PLAYING) {
 				this._player.play(0);
+				this._display.setTrick(Display.TRICK_PAUSE);
+			} else {
+				this._display.setTrick(Display.TRICK_PLAY);
 			}
 		},
 		_onPlayerPlaying: function() {
 			this._playbackStatus = PLAYER_PLAYING;
+			this._display.setTrick(Display.TRICK_PAUSE);
 		},
 		_onPlayerPaused: function() {
 			this._playbackStatus = PLAYER_PAUSED;
+		},
+		_onPlayerEnded: function() {
+			this._playbackStatus = PLAYER_PAUSED;
+			this._display.setTrick(Display.TRICK_PLAY);
 		}
 	});
 

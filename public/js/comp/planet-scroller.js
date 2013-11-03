@@ -77,6 +77,9 @@ define([
 	var PlanetScroller = Class({
 		parent: DomHandler,
 		constructor: function(o) {
+			this._data = [];
+			this._head = 0;
+			this._tail = 0;
 			this._pauseDraw = true;
 			this._mask = document.createElement('img');
 			this._mask.src = 'img/mask.png';
@@ -137,16 +140,16 @@ define([
 				position: GALAXY_CENTER
 			}));
 			this._planets.push(new Planet({
-				position: GALAXY_TOP
-			}));
-			this._planets.push(new Planet({
 				position: GALAXY_BOTTOM
 			}));
 			this._planets.push(new Planet({
-				position: GALAXY_TOPMOST
+				position: GALAXY_BOTTOMMOST
 			}));
 			this._planets.push(new Planet({
-				position: GALAXY_BOTTOMMOST
+				position: GALAXY_TOP
+			}));
+			this._planets.push(new Planet({
+				position: GALAXY_TOPMOST
 			}));
 			for (var i = 0, p; p = this._planets[i]; i++) {
 				p.on('planet:selected', this._onPlanetSelection.bind(this));
@@ -155,9 +158,23 @@ define([
 			this._pauseDraw = false;
 		},
 		_refresh: function() {
-			if (this._data) {
-				for (var i = 0, p; p = this._planets[i]; i++) {
-					p.data = this._data[i];
+			if (this._data && this._data[0]) {
+				var
+					dataLen = this.data.length,
+					p = null;
+				this._head = 0;
+				this._tail = 0;
+				this._head = this._calculateIndex(this._head, -1, -1, dataLen);
+				this._head = this._calculateIndex(this._head, -1, -1, dataLen);
+				for (var i = 0; i < 3; i++) {
+					p = this._planets[i];
+					p.data = this._data[this._tail];
+					this._tail = this._calculateIndex(this._tail, 1, dataLen, 0);
+				}
+				for (var i = 3; i < 5; i++) {
+					p = this._planets[i];
+					p.data = this._data[this._head];
+					this._head = this._calculateIndex(this._head, 1, dataLen, 0);
 				}
 			}
 		},
@@ -214,9 +231,39 @@ define([
 			if (Math.abs(this._startY - endY) < 55) {
 				direction *= 1.1;
 			}
+			var pos, index;
+			if (direction === 1) {
+				pos = 0;
+				index = this._head;
+				this._unshiftIndex();
+			} else if (direction === -1) {
+				pos = 4;
+				index = this._tail;
+				this._shiftIndex();
+			}
 			for (var i = 0, p; p = this._planets[i]; i++) {
 				p.snap(direction);
+				if (p.position === pos) {
+					p.data = this._data[index];
+				}
 			}
+		},
+		_shiftIndex: function() {
+			var dataLen = this._data.length;
+			this._head = this._calculateIndex(this._head, 1, dataLen, 0);
+			this._tail = this._calculateIndex(this._tail, 1, dataLen, 0);
+		},
+		_unshiftIndex: function() {
+			var dataLen = this._data.length;
+			this._head = this._calculateIndex(this._head, -1, -1, dataLen - 1);
+			this._tail = this._calculateIndex(this._tail, -1, -1, dataLen - 1);
+		},
+		_calculateIndex: function(index, step, limit, fallback) {
+			index += step;
+			if (index === limit) {
+				index = fallback;
+			}
+			return index;
 		},
 		_onPlanetSelection: function(data) {
 			this.emit('planet:selected', data);
@@ -263,7 +310,7 @@ define([
 		parent: DomHandler,
 		constructor: function(o) {
 			this._imgReady = false;
-			// this._deg = Math.random() * 6.301;
+			this._data = null;
 			this._deg = Math.floor(Math.random() * 360);
 			var oc = this._satOffCanvas = document.createElement('canvas');
 			oc.width = RING_IMG.width;
@@ -307,11 +354,21 @@ define([
 					return this._y - GALAXY[this._pos].y
 				}
 			},
+			position: {
+				get: function() {
+					return this._pos;
+				}
+			},
 			data: {
 				get: function() {
 					return this._data;
 				},
 				set: function(data) {
+					if (this._data) {
+						var d = (RING_IMG.width / 2);
+						this._dominantColor = null;
+						this._satOffCtx.translate(-d, -d);
+					}
 					this._data = data;
 					this._refresh();
 				}

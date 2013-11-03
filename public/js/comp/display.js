@@ -20,6 +20,11 @@ define([
 			this._trhickBtn = this.nodes.one('.trick-btn');
 			this._trhickBtn.addEventListener('click', this._onTrickBtnClick.bind(this));
 		},
+		statics: {
+			TRICK_PLAY: 1,
+			TRICK_PAUSE: 2,
+			TRICK_LOADING: 4
+		},
 		accessors: {
 			data: {
 				get: function() {
@@ -31,6 +36,21 @@ define([
 				}
 			}
 		},
+		setTrick: function(flag) {
+			if (flag & Display.TRICK_LOADING) {
+				this._trhickBtn.classList.remove('pause');
+				this._trhickBtn.classList.remove('play');
+				this._trhickBtn.classList.add('loading');
+			} else if (flag & Display.TRICK_PAUSE) {
+				this._trhickBtn.classList.remove('loading');
+				this._trhickBtn.classList.remove('play');
+				this._trhickBtn.classList.add('pause');
+			} else {
+				this._trhickBtn.classList.remove('loading');
+				this._trhickBtn.classList.remove('pause');
+				this._trhickBtn.classList.add('play');
+			}
+		},
 		refresh: function() {
 			this._infoBox.innerHTML = '';
 			this._infoBox.appendChild(x.render('track-info', {
@@ -39,13 +59,7 @@ define([
 		},
 		_onTrickBtnClick: function() {
 			this._playing = !this._playing;
-			if (this._playing) {
-				this._trhickBtn.classList.remove('play');
-				this._trhickBtn.classList.add('pause');
-			} else {
-				this._trhickBtn.classList.remove('pause');
-				this._trhickBtn.classList.add('play');
-			}
+			this.setTrick(this._playing ? Display.TRICK_PAUSE : Display.TRICK_PLAY);
 			this.emit('display:trick', this._playing);
 		},
 		_onThumbClick: function() {

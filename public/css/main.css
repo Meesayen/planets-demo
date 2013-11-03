@@ -162,7 +162,7 @@
     line-height: 15px;
 }
 .web-demo .track-title {
-    max-width: 110px;
+    max-width: 49%;
 }
 .web-demo {
     background: url(../img/nexus4.png);

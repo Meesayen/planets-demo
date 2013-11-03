@@ -14,6 +14,10 @@ define([
 		constructor: function(o) {
 			this._root = document.createElement('audio');
 			this._root.addEventListener('loadeddata', this._sourceLoaded.bind(this));
+			this._root.addEventListener('ended', this._playbackEnded.bind(this));
+			this._root.addEventListener('pause', this._playbackPaused.bind(this));
+			this._root.addEventListener('abort', this._playbackPaused.bind(this));
+			this._root.addEventListener('suspend', this._playbackPaused.bind(this));
 		},
 		play: function(start) {
 			if (this._loaded) {
@@ -24,7 +28,6 @@ define([
 		pause: function() {
 			if (this._loaded) {
 				this._root.pause();
-				this.emit('audio:paused');
 			}
 		},
 		load: function(url) {
@@ -35,6 +38,12 @@ define([
 		_sourceLoaded: function() {
 			this._loaded = true;
 			this.emit('audio:ready');
+		},
+		_playbackEnded: function() {
+			this.emit('audio:ended');
+		},
+		_playbackPaused: function() {
+			this.emit('audio:paused');
 		}
 	});
 

@@ -9,12 +9,13 @@ define([
 	var
 		SC_CLIENT_ID = 'e9193c59eb559e44e826e8347fab4b5e',
 		SC_BASE_URL = 'https://api.soundcloud.com',
+		PLAYLIST_URL = SC_BASE_URL + '/playlists/:playlistId.json',
 		TRACKS_URL = SC_BASE_URL + '/tracks.json',
 		TRACK_URL = SC_BASE_URL + '/tracks/:trackId.json';
 
 	var resolveRest = function(url, params) {
 		for (var k in params) {
-			url.replace(':' + k, params[k]);
+			url = url.replace(':' + k, params[k]);
 		}
 		return url;
 	};
@@ -31,6 +32,31 @@ define([
 		parent: Object,
 		constructor: function() {
 
+		},
+		getPlaylist: function(playlistId) {
+			var p = new x.Promise();
+			x.data.fetch(resolveRest(PLAYLIST_URL, {
+				playlistId: playlistId
+			}), {
+				consumer_key: SC_CLIENT_ID
+			}).then(function(data) {
+				var data = data.tracks;
+				var _data = [];
+				for (var i = 0, item; item = data[i]; i++) {
+					_data.push({
+						img: item.artwork_url || item.user.avatar_url,
+						duration: parseDuration(item.duration),
+						title: item.title,
+						artist: item.user.username,
+						album: 'no album',
+						streamUrl: item.stream_url + '?consumer_key=' + SC_CLIENT_ID,
+						year: item.release_year
+							|| item.created_at.slice(0, item.created_at.indexOf('/'))
+					});
+				}
+				p.complete(_data);
+			});
+			return p;
 		},
 		getTracks: function() {
 			var p = new x.Promise();

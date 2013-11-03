@@ -22,6 +22,10 @@
 .trick-btn.pause {
     background: url(../img/pause.png); background-repeat: no-repeat; background-size: 100%;
 }
+.trick-btn.loading {
+    background: url(../img/trick-loading.png);
+    -webkit-animation: trick-loading 1s steps(18) infinite;
+}
 .thumb {
     position: absolute;
     color: rgba(255, 255, 255, 0.6);
@@ -38,7 +42,7 @@
     line-height: 41px;
 }
 .thumb.list-up {
-    background-image: url(../img/list-up.png); background-repeat: no-repeat; 
+    background-image: url(../img/list-up.png); background-repeat: no-repeat;
     background-position: center center; opacity: 0.6; background-size: 13px;
     top: -16px;
 }
@@ -82,4 +86,14 @@
 .track-album {
     display: inline-block;
     width: 108px;
+}
+
+
+@-webkit-keyframes trick-loading {
+    from {
+        background-position-y: -62px;
+    }
+    to {
+        background-position-y: -620px;
+    }
 }

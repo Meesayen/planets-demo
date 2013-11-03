@@ -47,10 +47,12 @@ define(function() {
 			newClassProps = {},
 			parent = props.parent ? props.parent.prototype : Object.prototype,
 			accessors = props.accessors,
+			statics = props.statics,
 			newClass = props.constructor || function() {};
 		delete props.parent;
 		delete props.constructor;
 		delete props.accessors;
+		delete props.statics;
 
 		for (var k in accessors) {
 			newClassProps[k] = _propertyAccessor(accessors[k]);
@@ -59,6 +61,9 @@ define(function() {
 			newClassProps[k] = _parseProp(k, props[k]);
 		}
 		newClass.prototype = Object.create(parent, newClassProps);
+		for (var k in statics) {
+			newClass[k] = statics[k];
+		}
 
 		return newClass;
 	};
