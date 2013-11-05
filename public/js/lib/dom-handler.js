@@ -1,3 +1,12 @@
+/*!
+ * dom-handler.js 0.1.0
+ * A simple dom handler class
+ *
+ * Copyright 2013, Federico Giovagnoli <mailto:gvg.fede@gmail.com>
+ * Released under the MIT license
+ */
+
+
 define([
 	'lib/class',
 	'lib/eventemitter'

@@ -1,5 +1,7 @@
 /*!
- * Class.js v0.2
+ * class.js 0.4.0
+ * A simple handler function which makes easy the creation and
+ * extension of classes.
  *
  * Copyright 2013, Federico Giovagnoli <mailto:gvg.fede@gmail.com>
  * Released under the MIT license

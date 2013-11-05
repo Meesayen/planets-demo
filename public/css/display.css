@@ -20,11 +20,14 @@
     color: rgba(255, 255, 255, 0.6);
 }
 .trick-btn.pause {
-    background: url(../img/pause.png); background-repeat: no-repeat; background-size: 100%;
+    background: url(../img/trick-playing.png);
+    -webkit-animation: trick-btn-animation 600ms steps(20) infinite;
+    background-size: 30px 600px;
 }
 .trick-btn.loading {
-    background: url(../img/trick-loading.png);
-    -webkit-animation: trick-loading 1s steps(18) infinite;
+    background: url(../img/trick-loading2x.png);
+    -webkit-animation: trick-btn-animation 600ms steps(20) infinite;
+    background-size: 30px 600px;
 }
 .thumb {
     position: absolute;
@@ -89,11 +92,11 @@
 }
 
 
-@-webkit-keyframes trick-loading {
+@-webkit-keyframes trick-btn-animation {
     from {
-        background-position-y: -62px;
+        background-position-y: 0px;
     }
     to {
-        background-position-y: -620px;
+        background-position-y: 600px;
     }
 }

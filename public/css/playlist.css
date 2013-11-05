@@ -26,6 +26,10 @@
 .trick-btn.play {
     background: url(../img/play.png);
     background-size: 100%;
+    width: 28px;
+    margin-top: 1px;
+    margin-left: 1px;
+    background-repeat: no-repeat;
 }
 .playlist .track-artist {
 }

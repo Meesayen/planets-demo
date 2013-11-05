@@ -14,7 +14,6 @@ define([
 			this._root = x.render('display', { track: {}});
 			this._infoBox = this.nodes.one('.track-info');
 			this._opened = false;
-			this._playing = false;
 			this._thumb = this.nodes.one('.thumb');
 			this._thumb.addEventListener('click', this._onThumbClick.bind(this));
 			this._trhickBtn = this.nodes.one('.trick-btn');
@@ -56,11 +55,14 @@ define([
 			this._infoBox.appendChild(x.render('track-info', {
 				track: this._data
 			}));
+			if (this._data.playing) {
+				this.setTrick(Display.TRICK_PAUSE);
+			} else {
+				this.setTrick(Display.TRICK_PLAY);
+			}
 		},
 		_onTrickBtnClick: function() {
-			this._playing = !this._playing;
-			this.setTrick(this._playing ? Display.TRICK_PAUSE : Display.TRICK_PLAY);
-			this.emit('display:trick', this._playing);
+			this.emit('display:trick');
 		},
 		_onThumbClick: function() {
 			this._opened = !this._opened;

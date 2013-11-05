@@ -1,96 +1,17 @@
 define([
 	'require',
+	'lib/promise',
 	'lib/templates'
 ], function(
 	require,
+	Promise,
 	templates
 ) {
-
-	window.rAF = (function() {
-		return window.requestAnimationFrame
-			|| window.webkitRequestAnimationFrame
-			|| window.mozRequestAnimationFrame
-			|| window.oRequestAnimationFrame
-			|| window.msRequestAnimationFrame
-			|| function(callback){
-					window.setTimeout(callback, 1000 / 60);
-				};
-	})()
 
 	var
 		ss = window.sessionStorage,
 		ls = window.localStorage,
-		_slice = Array.prototype.slice,
 		UA = navigator.userAgent;
-
-	var Promise = function() {
-		this._data = null;
-		this._status = null;
-		this._callbacks = [];
-	};
-	Promise.prototype = {
-		then: function(onComplete, onReject, onProgress) {
-			var
-				p = new Promise(),
-				callback = null;
-			if (this._data) {
-				if (this._status === 'completed') {
-					callback = onComplete;
-				} else if (this._status === 'rejected') {
-					callback = onReject;
-				} else {
-					callback = onProgress;
-				}
-				var f = callback(this._data);
-				if (f) {
-					f.then(
-						p.complete,
-						p.reject,
-						p.progress
-					);
-				}
-			} else {
-				this._callbacks.push({
-					'complete': onComplete,
-					'reject': onReject,
-					'progress': onProgress,
-					'promise': p
-				});
-			}
-			return p;
-		},
-		complete: function(data) {
-			this._data = data;
-			this._status = 'completed';
-			this._trigger('complete');
-		},
-		reject: function(data) {
-			this._data = data;
-			this._status = 'rejected';
-			this._trigger('reject');
-		},
-		progress: function(data) {
-			this._data = data;
-			this._status = 'progressing';
-			this._trigger('progress');
-		},
-		_trigger: function(status) {
-			for (var i = 0, cb; cb = this._callbacks[i]; i++) {
-				if (cb[status]) {
-					var
-						f = cb[status](this._data),
-						p = cb['promise'];
-					if (f) {
-						f.then(
-							function() {p.complete.apply(p, _slice.call(arguments, 0))},
-							function() {p.reject.apply(p, _slice.call(arguments, 0))},
-							function() {p.progress.apply(p, _slice.call(arguments, 0))}
-						);
-					}
-				}
-			}
-		}
-	};
 
 	var _req = function(method, url, params) {
 		var p = new Promise();
@@ -196,7 +117,6 @@ define([
 			return node.querySelectorAll(selector);
 		},
 		require: require,
-		Promise: Promise,
 		device: {
 			isChromeMobile: (UA.indexOf('Android') > -1 && UA.indexOf('Chrome')),
 			isIOS: (UA.indexOf('iPhone') > -1 || UA.indexOf('iPad')),

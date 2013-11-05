@@ -13,11 +13,12 @@ define([
 		parent: EventEmitter,
 		constructor: function(o) {
 			this._root = document.createElement('audio');
+			this._duration = 0;
 			this._root.addEventListener('loadeddata', this._sourceLoaded.bind(this));
 			this._root.addEventListener('ended', this._playbackEnded.bind(this));
 			this._root.addEventListener('pause', this._playbackPaused.bind(this));
-			this._root.addEventListener('abort', this._playbackPaused.bind(this));
-			this._root.addEventListener('suspend', this._playbackPaused.bind(this));
+			this._root.addEventListener('timeupdate', this._playbackTimeupdate.bind(this));
+			// this._root.addEventListener('suspend', this._playbackSuspended.bind(this));
 		},
 		play: function(start) {
 			if (this._loaded) {
@@ -36,11 +37,23 @@ define([
 			this._root.src = url;
 		},
 		_sourceLoaded: function() {
+			this._duration = this._root.duration - 1;
 			this._loaded = true;
 			this.emit('audio:ready');
 		},
 		_playbackEnded: function() {
 			this.emit('audio:ended');
+		},
+		// _playbackSuspended: function() {
+		// 	console.log('suspended');
+		// },
+		// _playbackAborted: function() {
+		// 	console.log('aborted');
+		// },
+		_playbackTimeupdate: function(e) {
+			if (this._duration < this._root.currentTime) {
+				this._playbackEnded();
+			}
 		},
 		_playbackPaused: function() {
 			this.emit('audio:paused');

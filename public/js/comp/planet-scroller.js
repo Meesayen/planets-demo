@@ -1,3 +1,9 @@
+/*!
+ * Copyright 2013, Federico Giovagnoli <mailto:gvg.fede@gmail.com>
+ * Released under the MIT license
+ */
+
+
 define([
 	'lib/common',
 	'lib/class',
@@ -131,6 +137,19 @@ define([
 				this._pauseDraw = !this._pauseDraw;
 			}
 		},
+		next: function() {
+			var
+				pos = 4,
+				index = this._tail;
+			this._shiftIndex();
+			for (var i = 0, p; p = this._planets[i]; i++) {
+				p.snap(-1);
+				if (p.position === pos) {
+					p.data = this._data[index];
+					p.index = index;
+				}
+			}
+		},
 		_createPlanets: function() {
 			if (!RING_IMG.src) {
 				rAF(this._createPlanets.bind(this));
@@ -169,11 +188,13 @@ define([
 				for (var i = 0; i < 3; i++) {
 					p = this._planets[i];
 					p.data = this._data[this._tail];
+					p.index = this._tail;
 					this._tail = this._calculateIndex(this._tail, 1, dataLen, 0);
 				}
 				for (var i = 3; i < 5; i++) {
 					p = this._planets[i];
 					p.data = this._data[this._head];
+					p.index = this._head;
 					this._head = this._calculateIndex(this._head, 1, dataLen, 0);
 				}
 			}
@@ -228,9 +249,14 @@ define([
 			this._moveEnabled = false;
 			var endY = e.changedTouches ? e.changedTouches[0].pageY : e.pageY;
 			var direction = this._planets[2].offset > 0 ? 1 : -1
-			if (Math.abs(this._startY - endY) < 55) {
+			var delta = Math.abs(this._startY - endY);
+			if (delta < 55) {
 				direction *= 1.1;
+				if (delta < 5) {
+					this.emit('planet:clicked');
+				}
 			}
+
 			var pos, index;
 			if (direction === 1) {
 				pos = 0;
@@ -245,6 +271,7 @@ define([
 				p.snap(direction);
 				if (p.position === pos) {
 					p.data = this._data[index];
+					p.index = index;
 				}
 			}
 		},
@@ -265,8 +292,8 @@ define([
 			}
 			return index;
 		},
-		_onPlanetSelection: function(data) {
-			this.emit('planet:selected', data);
+		_onPlanetSelection: function(idx) {
+			this.emit('planet:selected', idx);
 		},
 		_calculateGalaxyPoints: function() {
 			var
@@ -311,6 +338,7 @@ define([
 		constructor: function(o) {
 			this._imgReady = false;
 			this._data = null;
+			this.index = 0;
 			this._deg = Math.floor(Math.random() * 360);
 			var oc = this._satOffCanvas = document.createElement('canvas');
 			oc.width = RING_IMG.width;
@@ -377,7 +405,7 @@ define([
 		_refresh: function() {
 			this._coverImg.src = this._data.img;
 			if (this._pos === 2) {
-				this.emit('planet:selected', this._data);
+				this.emit('planet:selected', this.index);
 			}
 		},
 		draw: function(ctx) {
@@ -417,9 +445,14 @@ define([
 		// Slightly worse performance on Chrome Desktop: ~55 FPS
 		_drawSatelliteWithImage: function(ctx, x, y, r) {
 			if (!RING_IMG || !this._dominantColor) return;
+
+			if (this._data.playing) {
+				this._deg++;
+			}
+
 			var
-				_ctx = this._satOffCtx,
-				deg = ++this._deg;
+				_ctx = this._satOffCtx;
+				deg = this._deg;
 			if (deg > 360) {
 				deg = this._deg = 0;
 			}
@@ -485,7 +518,7 @@ define([
 			}
 		},
 		snap: function(direction) {
-			var notify = true;
+			var changed = true;
 			if (direction === 1) {
 				this._pos++;
 				if (this._pos === GALAXY.length) {
@@ -504,7 +537,7 @@ define([
 				}
 			} else {
 				direction *= -1;
-				notify = false;
+				changed = false;
 			}
 
 			if (this._offscreen) {
@@ -518,8 +551,8 @@ define([
 				this._snap(this._y, x, y, r, direction);
 			}
 
-			if (this._pos === 2 && notify) {
-				this.emit('planet:selected', this._data);
+			if (this._pos === 2 && changed) {
+				this.emit('planet:selected', this.index);
 			}
 		},
 		_snap: function(oy, x, y, r, direction) {

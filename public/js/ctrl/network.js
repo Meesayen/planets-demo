@@ -1,8 +1,10 @@
 define([
 	'lib/common',
+	'lib/promise',
 	'lib/class'
 ], function(
 	x,
+	Promise,
 	Class
 ) {
 
@@ -28,30 +30,50 @@ define([
 		return '' + m + ':' + s;
 	};
 
+	var parsePlaylistDescription = function(description) {
+		var tracks = description.split('\n').map(function(el) {
+			return el.split(',').map(function(chunk) {
+				var parts = chunk.split(':');
+				var o = {};
+				o[parts[0]] = parts[1];
+				return o;
+			}).reduce(function(cur, next) {
+				var k = Object.keys(next)[0];
+				cur[k] = next[k];
+				return cur;
+			});
+		});
+		return tracks;
+	};
+
 	var Network = Class({
 		parent: Object,
 		constructor: function() {
 
 		},
 		getPlaylist: function(playlistId) {
-			var p = new x.Promise();
+			var p = new Promise();
 			x.data.fetch(resolveRest(PLAYLIST_URL, {
 				playlistId: playlistId
 			}), {
 				consumer_key: SC_CLIENT_ID
 			}).then(function(data) {
-				var data = data.tracks;
-				var _data = [];
-				for (var i = 0, item; item = data[i]; i++) {
+				var
+					tracksInfo = parsePlaylistDescription(data.description),
+					tracks = data.tracks,
+					trackInfo = null,
+					_data = [];
+				for (var i = 0, track; track = tracks[i]; i++) {
+					trackInfo = tracksInfo[i];
 					_data.push({
-						img: item.artwork_url || item.user.avatar_url,
-						duration: parseDuration(item.duration),
-						title: item.title,
-						artist: item.user.username,
-						album: 'no album',
-						streamUrl: item.stream_url + '?consumer_key=' + SC_CLIENT_ID,
-						year: item.release_year
-							|| item.created_at.slice(0, item.created_at.indexOf('/'))
+						img: track.artwork_url || track.user.avatar_url,
+						duration: parseDuration(track.duration),
+						title: trackInfo.title,
+						artist: trackInfo.artist,
+						album: trackInfo.album,
+						streamUrl: track.stream_url + '?consumer_key=' + SC_CLIENT_ID,
+						year: track.release_year
+							|| track.created_at.slice(0, track.created_at.indexOf('/'))
 					});
 				}
 				p.complete(_data);
@@ -59,7 +81,7 @@ define([
 			return p;
 		},
 		getTracks: function() {
-			var p = new x.Promise();
+			var p = new Promise();
 			x.data.fetch(TRACKS_URL, {
 				consumer_key: SC_CLIENT_ID,
 				filter: 'streamable',
