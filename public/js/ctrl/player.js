@@ -13,7 +13,8 @@ define([
 		parent: EventEmitter,
 		constructor: function(o) {
 			this._root = document.createElement('audio');
-			this._duration = 0;
+			this._source = document.createElement('source')
+			this._root.appendChild(this._source);
 			this._root.addEventListener('loadeddata', this._sourceLoaded.bind(this));
 			this._root.addEventListener('ended', this._playbackEnded.bind(this));
 			this._root.addEventListener('pause', this._playbackPaused.bind(this));
@@ -34,10 +35,10 @@ define([
 		load: function(url) {
 			this.emit('audio:loading');
 			this._loaded = false;
-			this._root.src = url;
+			this._source.src = url;
+			this._root.load();
 		},
 		_sourceLoaded: function() {
-			this._duration = this._root.duration - 1;
 			this._loaded = true;
 			this.emit('audio:ready');
 		},
@@ -51,7 +52,7 @@ define([
 		// 	console.log('aborted');
 		// },
 		_playbackTimeupdate: function(e) {
-			if (this._duration < this._root.currentTime) {
+			if (this._root.duration && this._root.duration - 1 < this._root.currentTime) {
 				this._playbackEnded();
 			}
 		},

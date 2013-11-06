@@ -201,10 +201,7 @@ define([
 		},
 		_onPlayerReady: function() {
 			this._tracks[this._playingTrackIndex].playing = true;
-			this._player.play(0);
-			if (this._playingTrackIndex === this._selectedTrackIndex) {
-				this._display.setTrick(Display.TRICK_PAUSE);
-			}
+			this._player.play();
 		},
 		_onPlayerPlaying: function() {
 			this._playbackStatus = PLAYER_PLAYING;

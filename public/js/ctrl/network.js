@@ -32,8 +32,8 @@ define([
 
 	var parsePlaylistDescription = function(description) {
 		var tracks = description.split('\n').map(function(el) {
-			return el.split(',').map(function(chunk) {
-				var parts = chunk.split(':');
+			return el.split(';').map(function(chunk) {
+				var parts = chunk.split('=');
 				var o = {};
 				o[parts[0]] = parts[1];
 				return o;
@@ -66,7 +66,7 @@ define([
 				for (var i = 0, track; track = tracks[i]; i++) {
 					trackInfo = tracksInfo[i];
 					_data.push({
-						img: track.artwork_url || track.user.avatar_url,
+						img: trackInfo.cover,
 						duration: parseDuration(track.duration),
 						title: trackInfo.title,
 						artist: trackInfo.artist,

@@ -183,8 +183,6 @@ define([
 					p = null;
 				this._head = 0;
 				this._tail = 0;
-				this._head = this._calculateIndex(this._head, -1, -1, dataLen);
-				this._head = this._calculateIndex(this._head, -1, -1, dataLen);
 				for (var i = 0; i < 3; i++) {
 					p = this._planets[i];
 					p.data = this._data[this._tail];
@@ -192,11 +190,12 @@ define([
 					this._tail = this._calculateIndex(this._tail, 1, dataLen, 0);
 				}
 				for (var i = 3; i < 5; i++) {
+					this._head = this._calculateIndex(this._head, -1, -1, dataLen - 1);
 					p = this._planets[i];
 					p.data = this._data[this._head];
 					p.index = this._head;
-					this._head = this._calculateIndex(this._head, 1, dataLen, 0);
 				}
+				this._head = this._calculateIndex(this._head, -1, -1, dataLen - 1);
 			}
 		},
 		_draw: function(canvas, ctx, w, h, planets, mask) {
