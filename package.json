@@ -1,12 +1,20 @@
 {
-  "name": "planets",
-  "version": "0.4.0",
-  "private": true,
+  "name": "Planets",
+  "version": "0.9.0",
   "scripts": {
-    "start": "node app.js"
+    "prestart": "gulp production",
+    "start": "node ./bin/www",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Meesayen/planets.git"
   },
   "dependencies": {
-    "express": "3.4.0",
-    "ect": "*"
+    "handlebars": "^2.0.0",
+    "express": "^4.8.3",
+    "express-handlebars": "^1.0.1",
+    "gulp": "^3.8.7",
+    "es6-gulp-boilerplate": "git+https://git@github.com/Meesayen/es6-gulp-boilerplate#v0.5.9"
   }
 }
