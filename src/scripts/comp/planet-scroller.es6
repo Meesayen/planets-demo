@@ -469,7 +469,7 @@ export default class PlanetScroller extends EventEmitter {
       return;
     }
     canvas.width = w;
-    _planets.forEach(p => {
+    planets.forEach(p => {
       p.draw(ctx);
     });
     ctx.globalCompositeOperation = 'destination-in';
