@@ -18,8 +18,6 @@ module.exports = function(config) {
       '../**/*.hbs': 'handlebars'
     },
     browserify: {
-      // debug: true,
-      // watch: true,
       transform: ['esnextify'],
       basedir: 'src/'
     },
