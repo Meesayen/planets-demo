@@ -1,6 +1,3 @@
-// configuration of express app for
-//   handlebars and static content
-
 var
   fs = require('fs'),
   express = require('express'),

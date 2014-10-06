@@ -12,3 +12,5 @@ README.md
 
 gulpfile.js
 karma.conf.js
+
+!app.js
