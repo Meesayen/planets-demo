@@ -1,6 +1,6 @@
 import store from '../core/store.es6';
 
-var SC_CLIENT_ID = 'e9193c59eb559e44e826e8347fab4b5e';
+var SC_CLIENT_ID = 'ed1f33f05cf945d17cbc1be71e1cf991';
 
 var parseDuration = (duration) => {
   var

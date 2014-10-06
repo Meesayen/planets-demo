@@ -1,0 +1,14 @@
+node_modules/*
+
+src/*
+
+.jshintrc
+.gitignore
+.npmignore
+.travis.yml
+
+LICENSE
+README.md
+
+gulpfile.js
+karma.conf.js

@@ -24,7 +24,9 @@
 
   {{!-- For Debugging Purposes Only --}}
   {{!-- TODO: exclude this script in production environment
-  <script type="text/javascript" src="/js/mock-server.js"></script>
+  {{#if __dev__}}
+    <script type="text/javascript" src="/js/mock-server.js"></script>
+  {{/if}}
   --}}
 
   {{!-- Core Scripts --}}
@@ -37,6 +39,8 @@
 
   {{!-- LiveReloading
   --}}
-  <script type="text/javascript" src="http://localhost:35729/livereload.js?snipver=1"></script>
+  {{#if __dev__}}
+    <script type="text/javascript" src="http://localhost:35729/livereload.js?snipver=1"></script>
+  {{/if}}
 
 {{/block}}

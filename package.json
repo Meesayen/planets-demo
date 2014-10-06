@@ -2,7 +2,7 @@
   "name": "Planets",
   "version": "1.0.2",
   "scripts": {
-    "prestart": "gulp production",
+    "predeploy": "node ./node_modules/gulp/bin/gulp production",
     "start": "node ./bin/www",
     "test": "gulp test"
   },
@@ -13,8 +13,14 @@
   "dependencies": {
     "handlebars": "^2.0.0",
     "express": "^4.8.3",
-    "express-handlebars": "^1.0.1",
+    "express-handlebars": "^1.0.1"
+  },
+  "devDependencies": {
     "gulp": "^3.8.7",
-    "es6-gulp-boilerplate": "git+https://git@github.com/Meesayen/es6-gulp-boilerplate#v0.5.9"
+    "es6-gulp-boilerplate": "Meesayen/es6-gulp-boilerplate#master"
+  },
+  "subdomain": "mee-planets",
+  "engines": {
+    "node": "0.10.x"
   }
 }

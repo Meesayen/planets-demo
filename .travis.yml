@@ -9,10 +9,9 @@ before_install:
 before_script:
 - npm install -g karma karma-cli
 deploy:
-  provider: appfog
-  email: gvg.fede@gmail.com
-  password:
-    secure: lWTbCUB+JAZ7KG2m+KsJsQhF0H99I68kw7s75epaFucjGZuyPUNrcPmLcqkEefHXTSL8kMRRKXBxQmiW3rmBDvQiPCP02alDMW/YYRaEo6HI2C33/L/g59/OafoTefd33OYiwOqtWvvhhr63x9QwqlVO60OgCSBw62hoeCDGJNY=
-  app: planets-demo
+  provider: nodejitsu
+  user: meesayen
+  api_key:
+    secure: BMWF/uLpZ8a5zWDzRrRVO1FjQe1gKr9DC9nT4TtZyq9X0Zhwso2wWGnYnUZyaPMNn5yJNZdpq28lwu57ioGiiD03NRR9IeQj5i6bi9rEVLeXmCV7eB5d8GzDiCH5xOrnx+dNPLdrgyVbnMPXXL1Uf5x97pUMN1fugdC+4D/rAFs=
   on:
     repo: Meesayen/planets-demo
