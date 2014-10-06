@@ -8,6 +8,8 @@ before_install:
 - sudo apt-get update -qq
 before_script:
 - npm install -g karma karma-cli
+before_deploy:
+- gulp production
 deploy:
   provider: nodejitsu
   user: meesayen

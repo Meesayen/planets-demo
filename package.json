@@ -2,7 +2,6 @@
   "name": "Planets",
   "version": "1.0.7",
   "scripts": {
-    "predeploy": "npm install -g gulp && gulp production",
     "start": "node ./bin/www",
     "test": "gulp test"
   },
