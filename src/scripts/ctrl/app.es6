@@ -136,7 +136,6 @@ export default class App extends DomHandler {
 			var img = document.createElement('img');
 			img.crossOrigin = 'Anonymous';
 			img.onload = () => {
-				console.log(this);
 				this._offscreenCtx.drawImage(img, 0, 0,
 						BLURRED_CANVAS_SIZE, BLURRED_CANVAS_SIZE);
 				blurWorker.postMessage({

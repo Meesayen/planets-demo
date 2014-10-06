@@ -58,7 +58,9 @@ var base = 'https://api.soundcloud.com';
 export default {
 
   'playlist': {
-    'url': `${base}/playlists/:playlistId.json`
+    'url': `${base}/playlists/:playlistId.json?callback=processResponse`,
+    'type': 'jsonp',
+    'jsonpCallback': 'callback'
   },
   'tracks': {
     'url': `${base}/tracks.json`

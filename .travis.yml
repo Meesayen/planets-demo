@@ -7,7 +7,7 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 - sudo apt-get update -qq
 before_script:
-- npm install -g karma karma-cli
+- npm install -g karma karma-cli gulp
 deploy:
   provider: nodejitsu
   user: meesayen
