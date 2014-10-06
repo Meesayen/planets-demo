@@ -13,6 +13,7 @@ before_deploy:
 deploy:
   provider: nodejitsu
   user: meesayen
+  skip_cleanup: true
   api_key:
     secure: BMWF/uLpZ8a5zWDzRrRVO1FjQe1gKr9DC9nT4TtZyq9X0Zhwso2wWGnYnUZyaPMNn5yJNZdpq28lwu57ioGiiD03NRR9IeQj5i6bi9rEVLeXmCV7eB5d8GzDiCH5xOrnx+dNPLdrgyVbnMPXXL1Uf5x97pUMN1fugdC+4D/rAFs=
   on:
