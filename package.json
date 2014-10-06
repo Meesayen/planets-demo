@@ -2,7 +2,7 @@
   "name": "Planets",
   "version": "1.0.3",
   "scripts": {
-    "predeploy": "node ./node_modules/gulp/bin/gulp production",
+    "predeploy": "gulp production",
     "start": "node ./bin/www",
     "test": "gulp test"
   },
