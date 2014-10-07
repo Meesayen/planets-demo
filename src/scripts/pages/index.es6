@@ -9,12 +9,11 @@ if (device.isChromeMobile && screen.height - 30 > doc.body.clientHeight) {
   var _handleForceFullscreen = (e) => {
     var
       self = e.srcElement || e.target,
-      el = doc.docElement,
-      rfs = el.requestFullScreen ||
-          el.webkitRequestFullScreen ||
-          el.mozRequestFullScreen;
+      rfs = self.requestFullScreen ||
+          self.webkitRequestFullScreen ||
+          self.mozRequestFullScreen;
 
-    rfs.call(el);
+    rfs.call(self);
     self.removeEventListener('click', _handleForceFullscreen);
     doc.body.removeChild(self);
     app.run();

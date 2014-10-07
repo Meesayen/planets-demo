@@ -10,4 +10,4 @@ Live demo: [link][2]
 
 
 [1]:https://www.behance.net/wip/308583/580615
-[2]:http://planets-demo.aws.af.cm/
+[2]:http://mee-planets.jit.su/

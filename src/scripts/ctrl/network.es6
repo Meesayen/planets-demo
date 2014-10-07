@@ -1,4 +1,7 @@
-import store from '../core/store.es6';
+import registry from '../config/storeRegistry.es6';
+import Store from '../core/store.es6';
+
+var store = new Store(registry);
 
 var SC_CLIENT_ID = 'ed1f33f05cf945d17cbc1be71e1cf991';
 
